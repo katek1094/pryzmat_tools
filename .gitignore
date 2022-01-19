@@ -1,0 +1,8 @@
+/venv/
+__pychache__
+.idea/
+db.sqlite3
+.env
+
+# migrations for every app, gitignore only during local development
+/testapp/migrations/
