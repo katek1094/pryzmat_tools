@@ -6,8 +6,8 @@ from django.views.generic.list import ListView
 
 from .forms import PhraseScrapeForm, BestOffersScraperForm, UrlIdsScraperForm
 from .models import ScraperResult, PlanerPhraseResult
-from .scripts import scrape_phrase
 from .scrapers import BestOffersScraper, UrlIdsScraper
+from .scripts import scrape_phrase
 
 
 # Create your views here.

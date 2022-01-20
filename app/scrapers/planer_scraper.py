@@ -59,6 +59,7 @@ def scrape_results(page_source):
 
 
 def scrape_phrase(driver: AgencyDriver, phrase: str):
+    print(phrase)
     driver.driver.get(generate_url_from_phrase(phrase))
     try:
         driver.wait(ec.presence_of_element_located((By.CSS_SELECTOR, 'table')), 1)
