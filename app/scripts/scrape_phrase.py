@@ -7,19 +7,15 @@ from app.scrapers import scrape_planner
 
 
 def scrape_phrase(phrase):
-    print(phrase)
-    print(1)
     excel_file = open(f'{phrase}.xlsx', 'wb')
     wb = scrape_planner(phrase)
     wb.save(excel_file)
     excel_file.close()
     obj = PlanerPhraseResult(phrase=phrase)
-    print(2)
     with open(f'{phrase}.xlsx', 'rb') as f:
         obj.file.save(f'{phrase}.xlsx', File(f), save=False)
         os.remove(f'{phrase}.xlsx')
     obj.save()
-    print(3)
 
 # def scrape_phrase(phrase):
 #     wb = scrape_planner(phrase)
