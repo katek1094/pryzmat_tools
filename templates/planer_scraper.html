@@ -1,0 +1,13 @@
+{% extends 'base_app.html' %}
+
+{% block body_block %}
+    <a href="{% url 'scrape_phrase' %}">
+        <button class="btn btn-dark">scrape phrase</button>
+    </a>
+    <br/>
+    <br/>
+    {% for obj in object_list %}
+        <a href="{{ obj.file.url }}">{{ obj.phrase }}</a>
+        <br/>
+    {% endfor %}
+{% endblock %}

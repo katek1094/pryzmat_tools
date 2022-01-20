@@ -1,0 +1,9 @@
+{% extends 'base_app.html' %}
+
+{% block body_block %}
+    {% for obj in object_list %}
+        <a href="{{ obj.file.url }}">{{ obj.account.name }} - {{ obj.date|date:'d-m-Y H:i' }}</a>
+        <br/>
+    {% endfor %}
+
+{% endblock %}

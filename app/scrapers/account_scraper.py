@@ -26,8 +26,8 @@ def start_driver():
 
 
 class AccountScraper:
-    MIN_SLEEP_TIME = 1
-    MAX_SLEEP_TIME = 3
+    MIN_SLEEP_TIME = 2
+    MAX_SLEEP_TIME = 4
     ALLEGRO_URL = 'https://allegro.pl'
 
     categories: [Category]

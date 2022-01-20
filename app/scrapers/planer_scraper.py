@@ -130,4 +130,4 @@ def scrape_planner(phrase: str):
         ws.cell(row=row, column=9).value = r.cpc
         row += 1
 
-    wb.save(f'/home/kajetan/Documents/pryzmat/planer_scraper/{phrase}.xlsx')
+    return wb

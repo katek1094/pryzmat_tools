@@ -1,0 +1,33 @@
+{% extends 'base_app.html' %}
+{% load crispy_forms_filters %}
+
+{% block body_block %}
+    <div>
+        <h4>po zatwierdzeniu formularza trzeba chwilę poczekać aż wyniki się pojawią (max minuta)</h4>
+        <h4>pojawią się na tej samej stronie, nie należy nigdzie przechodzić</h4>
+        <p>w tej chwili nie ma żadnej walidacji danych, więc jak się coś źle poda to się wywala program</p>
+        <p>upewnić się, że:</p>
+        <ul>
+            <li>nazwa klienta jest poprawna</li>
+            <li>target amount nie jest większe od ilości ofert na sklepie</li>
+            <li>url prowadzi do strony sklepu Allegro z ofertami</li>
+        </ul>
+        <br/>
+        <br/>
+        <form method="post" action="{% url 'print_ids' %}">
+            {% csrf_token %}
+            {{ form1|crispy }}
+            <br/>
+            <input class="btn btn-dark" type="submit" value="Scrape">
+        </form>
+        <br/>
+        <br/>
+        <br/>
+        <form method="post" action="{% url 'print_ids' %}">
+            {% csrf_token %}
+            {{ form2|crispy }}
+            <br/>
+            <input class="btn btn-dark" type="submit" value="Scrape">
+        </form>
+    </div>
+{% endblock %}

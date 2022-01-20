@@ -9,7 +9,7 @@ class Account(models.Model):
 
 
 def scraper_result_path(instance, filename):
-    return '/scraper_results/' + instance.account.name + '/' + filename
+    return 'scraper_results/' + instance.account.name + '/' + filename
 
 
 class ScraperResult(models.Model):
@@ -22,12 +22,13 @@ class ScraperResult(models.Model):
 
 
 def planer_phrase_result_path(_, filename):
-    return '/scraper_results/' + filename
+    return 'scraper_results/' + filename
 
 
 class PlanerPhraseResult(models.Model):
     phrase = models.CharField(max_length=100)
     file = models.FileField(upload_to=planer_phrase_result_path)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.phrase

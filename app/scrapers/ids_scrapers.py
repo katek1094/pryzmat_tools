@@ -35,7 +35,7 @@ class IdsScraper:
         while not finished:
             ids, next_page_button = self.get_ids_from_page(self.target_amount - len(self.ids))
             self.ids += ids
-            finished = len(self.ids) == self.target_amount or not next_page_button
+            finished = len(self.ids) >= self.target_amount or not next_page_button
 
     def get_ids_from_page(self, limit):
         soup = BeautifulSoup(self.driver.page_source, 'html5lib')

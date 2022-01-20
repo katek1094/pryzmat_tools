@@ -36,7 +36,9 @@ class ExcelWriter:
         if not os.path.exists(f'/home/kajetan/Documents/pryzmat/scraped_data/{self.username}'):
             os.makedirs(f'/home/kajetan/Documents/pryzmat/scraped_data/{self.username}')
         today = datetime.date.today().strftime('%d-%m-%Y')
-        self.wb.save(f'/home/kajetan/Documents/pryzmat/scraped_data/{self.username}/{self.username}-{today}.xlsx')
+
+        # self.wb.save(f'/home/kajetan/Documents/pryzmat/scraped_data/{self.username}/{self.username}-{today}.xlsx')
+
         print(f'excel writer finished on account {username}')
 
     def playground(self):
