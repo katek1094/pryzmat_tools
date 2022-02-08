@@ -82,4 +82,4 @@ def show_chart(request):
     if request.POST:
         username = request.POST.get('username')
         data = get_chart_data(username)
-        return render(request, 'chart.html', {'data': data})
+        return render(request, 'chart.html', {'data': data, 'username': username})

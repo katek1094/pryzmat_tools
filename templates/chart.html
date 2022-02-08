@@ -18,12 +18,25 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '{{ username }}',
+                            font: {
+                                size: 24
+                            }
+                        }
+                    },
                     scales: {
                         y: {
                             beginAtZero: false
                         }
-                    }
-                }
+                    },
+
+                },
             });
         </script>
     </div>
