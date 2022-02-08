@@ -1,0 +1,12 @@
+{% extends 'base_app.html' %}
+{% load crispy_forms_filters %}
+
+{% block body_block %}
+    <h3>Wykres trafności</h3>
+    <form method="post" action="{% url 'show_chart' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br/>
+        <input class="btn btn-dark" type="submit" value="utwórz wykres">
+    </form>
+{% endblock %}
