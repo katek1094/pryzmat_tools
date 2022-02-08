@@ -10,4 +10,6 @@ url_patterns = [
     path('phrase_scraped', views.phrase_scraped, name='phrase_scraped'),
     path('ids_scraper', views.ids_scraper, name='ids_scraper'),
     path('print_ids', views.print_ids, name='print_ids'),
+    path('get_accuracy_chart', views.get_accuracy_chart, name='get_accuracy_chart'),
+    path('show_chart', views.show_chart, name='show_chart'),
 ]

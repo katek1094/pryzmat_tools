@@ -4,10 +4,10 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
-from .forms import PhraseScrapeForm, BestOffersScraperForm, UrlIdsScraperForm
+from .forms import PhraseScrapeForm, BestOffersScraperForm, UrlIdsScraperForm, GetChartForm
 from .models import ScraperResult, PlanerPhraseResult
 from .scrapers import BestOffersScraper, UrlIdsScraper
-from .scripts import scrape_phrase
+from .scripts import scrape_phrase, get_chart_data
 
 
 # Create your views here.
@@ -70,3 +70,16 @@ def print_ids(request):
             ids = str(scraper.ids)[1:-1]
             return render(request, 'print_ids.html', {'ids': ids})
     return render(request, 'phrase_scraped.html')
+
+
+
+
+def get_accuracy_chart(request):
+    return render(request, 'get_chart.html', {'form': GetChartForm})
+
+
+def show_chart(request):
+    if request.POST:
+        username = request.POST.get('username')
+        data = get_chart_data(username)
+        return render(request, 'chart.html', {'data': data})

@@ -12,32 +12,38 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                {% url 'home' as url %}
+                <!--{% url 'home' as url %}-->
+                <!--<li class="nav-item">-->
+                    <!--<a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"-->
+                       <!--href="{% url 'home' %}">home</a>-->
+                <!--</li>-->
+                {% url 'get_accuracy_chart' as url %}
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"
-                       href="{% url 'home' %}">home</a>
+                       href="{% url 'get_accuracy_chart' %}">wykres trafności</a>
                 </li>
 
-                {% url 'account_scraper' as url %}
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"
-                       href="{% url 'account_scraper' %}">account scraper</a>
-                </li>
 
-                {% url 'planer_scraper' as url %}
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"
-                       href="{% url 'planer_scraper' %}">planer scraper</a>
-                </li>
+                <!--{% url 'account_scraper' as url %}-->
+                <!--<li class="nav-item">-->
+                <!--    <a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"-->
+                <!--       href="{% url 'account_scraper' %}">account scraper</a>-->
+                <!--</li>-->
 
-                {% url 'ids_scraper' as url %}
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"
-                       href="{% url 'ids_scraper' %}">ids scraper</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'admin:index' %}">admin</a>
-                </li>
+                <!--{% url 'planer_scraper' as url %}-->
+                <!--<li class="nav-item">-->
+                    <!--<a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"-->
+                       <!--href="{% url 'planer_scraper' %}">planer scraper</a>-->
+                <!--</li>-->
+
+                <!--{% url 'ids_scraper' as url %}-->
+                <!--<li class="nav-item">-->
+                    <!--<a class="nav-link {% if request.path == url %}active{% endif %}" aria-current="page"-->
+                       <!--href="{% url 'ids_scraper' %}">ids scraper</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                    <!--<a class="nav-link" aria-current="page" href="{% url 'admin:index' %}">admin</a>-->
+                <!--</li>-->
             </ul>
         </div>
     </div>

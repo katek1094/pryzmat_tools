@@ -16,13 +16,15 @@ def start_driver():
     options.headless = True
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--headless")
+    options.add_argument('disable-blink-features=AutomationControlled')
     options.add_argument("--disable-gpu")
     a = "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    b = " (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+    b = " (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36"
     c = a + b
     options.add_argument(c)
+
     # noinspection PyArgumentList
-    return webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+    return webdriver.Chrome(options=options)
 
 
 class AccountScraper:
@@ -117,7 +119,7 @@ class AccountScraper:
                 subcategories = []
                 """
                 this subcategories reset have to be here,
-                because sometimes in allegro there is a infinite loop of categories, 
+                because sometimes in allegro there is a infinite loop of categories,
                 which from only one is not clickable
                 """
                 break

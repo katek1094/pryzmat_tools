@@ -5,6 +5,10 @@ class PhraseScrapeForm(forms.Form):
     phrase = forms.CharField()
 
 
+class GetChartForm(forms.Form):
+    username = forms.CharField()
+
+
 class BestOffersScraperForm(forms.Form):
     username = forms.CharField()
     MODES = (('accuracy', 'trafność'), ('popularity', 'popularność'),)
