@@ -32,12 +32,12 @@ def login(s: requests.Session):
         raise Exception('CAN NOT LOGIN INTO NIEZBEDNIK SPRZEDAWCY')
 
 
-def get_account_raw_data(s: requests.Session, account_name: str):
+def get_account_raw_data(s: requests.Session, account_name: str, time_range: str):
     api_url = 'https://niezbedniksprzedawcy.pl/StatystykiAllegro/get_offers_stats?format=json'
     params = {'q': account_name,
               'p': 1,  # pagination control
               'l': 600,  # amount of data on one page
-              'f': '1M',  # time range of data requested
+              'f': time_range,  # time range of data requested
               'offerPositionLimit': 600}  # minimum position in accuracy ranking for offer to show; max=600
     r = s.get(api_url, params=params)
     return r.json()
@@ -86,16 +86,21 @@ def format_account_data(data):
     return formatted_data
 
 
-def generate_columns_for_dates_dict(skip=1):
+def generate_columns_for_dates_dict(time_range: str, skip=1):
     result = {}
     start_date = datetime.date.today()
-    day_count = 30
+    if time_range == '1M':
+        day_count = 30
+    elif time_range == '3M':
+        day_count = 90
+    else:
+        raise ValueError('time range wrong value')
     for index, date in enumerate(start_date - datetime.timedelta(day_count - n) for n in range(day_count)[0::skip]):
         result[date] = index + 2
     return result
 
 
-columns_for_dates = generate_columns_for_dates_dict()
+# columns_for_dates = generate_columns_for_dates_dict()
 
 
 def get_point_for_day_data(arr):
@@ -128,7 +133,7 @@ def get_point_for_day_data(arr):
     return round(points, 2)
 
 
-def create_chart_data(data: [OfferData], username: str):
+def create_chart_data(data: [OfferData], username: str, time_range):
     # # WRITE DATES
     # for date, column in columns_for_dates.items():
     #     ws.cell(row=1, column=column).value = date.strftime('%d-%m')
@@ -142,14 +147,23 @@ def create_chart_data(data: [OfferData], username: str):
     #     row += 1
     #
     # reformat data into days of records
+    if time_range == '1M':
+        day_count = 30
+    elif time_range == '3M':
+        day_count = 90
+    else:
+        raise ValueError('time range wrong value')
     days = []
-    for _ in range(30):
+    for _ in range(day_count):
         days.append([])
     for offer_data in data:
         for index, record in enumerate(offer_data.records):
-            days[columns_for_dates[record.date] - 2].append(record.value)
+            if index == 0 and time_range == '3M':
+                continue
+            days[generate_columns_for_dates_dict(time_range)[record.date] - 2].append(record.value)
 
     points = []
+
     for day in days:
         points.append(get_point_for_day_data(day))
 
@@ -159,11 +173,11 @@ def create_chart_data(data: [OfferData], username: str):
     #     ws.cell(row=2, column=col + 2).value = point
 
     dates = []
-    for date in generate_columns_for_dates_dict(3).keys():
+    for date in generate_columns_for_dates_dict(time_range, 3).keys():
         dates.append(date.strftime('%d-%m'))
 
     avg_points = []
-    for x in range(10):
+    for x in range(int(day_count / 3)):
         # print(x)
         # print(x * 3, x * 3 + 2)
         avg_points.append(round(mean(points[x * 3:x * 3 + 2]), 2))
@@ -171,15 +185,14 @@ def create_chart_data(data: [OfferData], username: str):
     return dates, avg_points
 
 
-def create_account_stats_report(s, account_name):
-    raw_data = get_account_raw_data(s, account_name)
+def create_account_stats_report(s, account_name, time_range):
+    raw_data = get_account_raw_data(s, account_name, time_range)
     results = format_account_data(raw_data)
-    return create_chart_data(results, account_name)
+    return create_chart_data(results, account_name, time_range)
 
 
-def get_chart_data(username):
+def get_chart_data(username, time_range):
     session = create_session()
     login(session)
 
-    return create_account_stats_report(session, username)
-
+    return create_account_stats_report(session, username, time_range)

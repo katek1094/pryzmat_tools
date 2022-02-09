@@ -7,6 +7,11 @@ class PhraseScrapeForm(forms.Form):
 
 class GetChartForm(forms.Form):
     username = forms.CharField()
+    CHOICES = [
+        ('1M', '1 miesiąc'),
+        ('3M', '3 miesiące'),
+    ]
+    time_range = forms.ChoiceField(choices=CHOICES)
 
 
 class BestOffersScraperForm(forms.Form):

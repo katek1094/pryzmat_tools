@@ -81,5 +81,8 @@ def get_accuracy_chart(request):
 def show_chart(request):
     if request.POST:
         username = request.POST.get('username')
-        data = get_chart_data(username)
+        time_range = request.POST.get('time_range')
+        data = get_chart_data(username, time_range)
+        if all(v == 0 for v in data[1]):
+            return render(request, 'wrong_username.html')
         return render(request, 'chart.html', {'data': data, 'username': username})
