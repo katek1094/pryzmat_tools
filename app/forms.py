@@ -9,6 +9,7 @@ class GetChartForm(forms.Form):
     username = forms.CharField()
     CHOICES = [
         ('1M', '1 miesiąc'),
+        ('2M', '2 miesiące'),
         ('3M', '3 miesiące'),
     ]
     time_range = forms.ChoiceField(choices=CHOICES)

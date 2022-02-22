@@ -91,6 +91,8 @@ def generate_columns_for_dates_dict(time_range: str, skip=1):
     start_date = datetime.date.today()
     if time_range == '1M':
         day_count = 30
+    elif time_range == '2M':
+        day_count = 60
     elif time_range == '3M':
         day_count = 90
     else:
@@ -149,6 +151,8 @@ def create_chart_data(data: [OfferData], username: str, time_range):
     # reformat data into days of records
     if time_range == '1M':
         day_count = 30
+    elif time_range == '2M':
+        day_count = 60
     elif time_range == '3M':
         day_count = 90
     else:
@@ -158,7 +162,7 @@ def create_chart_data(data: [OfferData], username: str, time_range):
         days.append([])
     for offer_data in data:
         for index, record in enumerate(offer_data.records):
-            if index == 0 and time_range == '3M':
+            if index == 0 and time_range == '3M' or index == 0 and time_range == '2M':
                 continue
             days[generate_columns_for_dates_dict(time_range)[record.date] - 2].append(record.value)
 
