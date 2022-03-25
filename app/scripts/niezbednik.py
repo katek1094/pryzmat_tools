@@ -155,9 +155,9 @@ data format for table:
 
 def generate_table_data_for_days(days):
     results = []
-    amount_of_periods = int(len(days) / 3)
+    amount_of_periods = int(len(days) / 6)
     for period_index in range(amount_of_periods):
-        period_days = days[period_index * 3:(period_index * 3) + 3]
+        period_days = days[period_index * 6:(period_index * 6) + 6]
         range_counters = []
         for _ in range(len(ranges)):
             range_counters.append(0)
