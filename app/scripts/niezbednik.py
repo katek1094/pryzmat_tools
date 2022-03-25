@@ -102,37 +102,85 @@ def generate_columns_for_dates_dict(time_range: str, skip=1):
     return result
 
 
-# columns_for_dates = generate_columns_for_dates_dict()
+class Range:
+    def __init__(self, floor: int, ceiling: int, points):
+        if floor > ceiling:
+            raise ValueError('floor value can not be greater than ceiling value!')
+        else:
+            self.floor = floor
+            self.ceiling = ceiling
+            self.points = points
+
+    def check_if_value_in_range(self, value):
+        return self.ceiling > value >= self.floor
+
+    def __repr__(self):
+        return f'{self.floor} - {self.ceiling}'
+
+
+ranges = [
+    (1, 1, 14),
+    (2, 3, 8),
+    (4, 5, 5),
+    (6, 8, 3.5),
+    (9, 12, 2.5),
+    (13, 20, 2),
+    (21, 40, 1),
+    (41, 60, 0.8),
+    (61, 120, 0.4),
+    (121, 180, 0.2),
+    (181, 600, 0.1)
+]
+
+range_objects = []
+
+for rng in ranges:
+    range_objects.append(Range(*rng))
 
 
 def get_point_for_day_data(arr):
     points = 0
     for dt in arr:
-        if dt == 1:
-            points += 14
-        elif 4 > dt > 1:
-            points += 8
-        elif 6 > dt > 3:
-            points += 5
-        elif 9 > dt > 5:
-            points += 3.5
-        elif 13 > dt > 8:
-            points += 2.5
-        elif 21 > dt > 12:
-            points += 2
-        elif 41 > dt > 20:
-            points += 1
-        elif 61 > dt > 40:
-            points += 0.8
-        elif 121 > dt > 60:
-            points += 0.4
-        elif 181 > dt > 120:
-            points += 0.2
-        elif 601 > dt > 180:
-            points += 0.1
-        else:
-            raise Exception('wrong value or code "if" ranges')
+        for range_obj in range_objects:
+            if range_obj.check_if_value_in_range(dt):
+                points += range_obj.points
     return round(points, 2)
+
+
+"""
+data format for table:
+3-dniowe okresy -> dict of ranges -> average amount of offers in this day in this range
+"""
+
+
+def generate_table_data_for_days(days):
+    results = []
+    amount_of_periods = int(len(days) / 3)
+    for period_index in range(amount_of_periods):
+        period_days = days[period_index * 3:(period_index * 3) + 3]
+        range_counters = []
+        for _ in range(len(ranges)):
+            range_counters.append(0)
+        # print(range_counters)
+        not_empty_counter = 0
+        for period_day in period_days:
+            if len(period_day):
+                not_empty_counter += 1
+            for index, range_obj in enumerate(range_objects):
+                for val in period_day:
+                    # print(val)
+                    # print(range_obj)
+                    if range_obj.check_if_value_in_range(val):
+                        # print(range_counters[index])
+                        range_counters[index] += 1
+                    # else:
+                        # print('DUPA')
+        for index, rng_counter in enumerate(range_counters):
+            if not_empty_counter:
+                range_counters[index] = round(rng_counter / not_empty_counter, 1)
+        results.append(range_counters)
+
+    return results, range_objects
 
 
 def create_chart_data(data: [OfferData], username: str, time_range):
@@ -167,6 +215,7 @@ def create_chart_data(data: [OfferData], username: str, time_range):
             days[generate_columns_for_dates_dict(time_range)[record.date] - 2].append(record.value)
 
     points = []
+    table_data = generate_table_data_for_days(days)
 
     for day in days:
         points.append(get_point_for_day_data(day))
@@ -186,7 +235,7 @@ def create_chart_data(data: [OfferData], username: str, time_range):
         # print(x * 3, x * 3 + 2)
         avg_points.append(round(mean(points[x * 3:x * 3 + 2]), 2))
 
-    return dates, avg_points
+    return dates, avg_points, table_data
 
 
 def create_account_stats_report(s, account_name, time_range):

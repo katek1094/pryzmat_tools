@@ -1,6 +1,25 @@
 {% extends 'base_app.html' %}
 
 {% block body_block %}
+    <div>
+        <table class="table">
+            <tr>
+
+            {% for range in data.2.1 %}
+                <th>{{ range }}</th>
+            {% endfor %}
+            </tr>
+            {% for period in data.2.0 %}
+                <tr>
+                    {% for dt in period %}
+                        <td>{{ dt }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div style="width: 800px; height: 800px">
         <canvas id="myChart" width="800" height="400"></canvas>
@@ -40,6 +59,7 @@
             });
         </script>
     </div>
+
 
 
 
