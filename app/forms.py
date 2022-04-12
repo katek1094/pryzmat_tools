@@ -25,3 +25,7 @@ class BestOffersScraperForm(forms.Form):
 class UrlIdsScraperForm(forms.Form):
     url = forms.URLField()
     target_amount = forms.IntegerField()
+
+
+class MacroGeneratorForm(forms.Form):
+    file = forms.FileField(widget=forms.widgets.FileInput(attrs={'accept': '.xlsx'}))

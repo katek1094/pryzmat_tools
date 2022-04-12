@@ -4,10 +4,10 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
-from .forms import PhraseScrapeForm, BestOffersScraperForm, UrlIdsScraperForm, GetChartForm
+from .forms import PhraseScrapeForm, BestOffersScraperForm, UrlIdsScraperForm, GetChartForm, MacroGeneratorForm
 from .models import ScraperResult, PlanerPhraseResult
 from .scrapers import BestOffersScraper, UrlIdsScraper
-from .scripts import scrape_phrase, get_chart_data
+from .scripts import scrape_phrase, get_chart_data, create_macros
 
 
 # Create your views here.
@@ -72,6 +72,15 @@ def print_ids(request):
     return render(request, 'phrase_scraped.html')
 
 
+def upload_file(request):
+    if request.method == 'POST':
+        form = MacroGeneratorForm(request.POST, request.FILES)
+        if form.is_valid():
+            create_macros(request.FILES['file'])
+            return render(request, 'macro_download.html')
+    else:
+        form = MacroGeneratorForm()
+        return render(request, 'macro_gen_upload.html', {'form': form})
 
 
 def get_accuracy_chart(request):

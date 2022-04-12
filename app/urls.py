@@ -12,4 +12,5 @@ url_patterns = [
     path('print_ids', views.print_ids, name='print_ids'),
     path('get_accuracy_chart', views.get_accuracy_chart, name='get_accuracy_chart'),
     path('show_chart', views.show_chart, name='show_chart'),
+    path('upload_file', views.upload_file, name='upload_file'),
 ]
