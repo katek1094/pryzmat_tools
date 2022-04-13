@@ -76,8 +76,8 @@ def upload_file(request):
     if request.method == 'POST':
         form = MacroGeneratorForm(request.POST, request.FILES)
         if form.is_valid():
-            create_macros(request.FILES['file'])
-            return render(request, 'macro_download.html')
+            a, b = create_macros(request.FILES['file'])
+            return render(request, 'macro_download.html', {'last_month': a, 'campaigns': b})
     else:
         form = MacroGeneratorForm()
         return render(request, 'macro_gen_upload.html', {'form': form})

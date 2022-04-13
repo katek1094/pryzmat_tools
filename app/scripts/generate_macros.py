@@ -167,12 +167,13 @@ def generate_macro(mode: str, accounts_list: list, name: str):
         "Commands": commands_array
     }
     fs = FileSystemStorage()
-    fs.save(name + '.json', ContentFile(json.dumps(full_json, ensure_ascii=False)))
+    return fs.save(name + '.json', ContentFile(json.dumps(full_json, ensure_ascii=False)))
 
 
 def create_macros(file):
     wb = load_workbook(file)
     ws = wb.active
-    accounts = [cell.value for cell in ws['A']]
-    generate_macro('last_month', accounts, 'last_month')
-    generate_macro('campaigns', accounts, 'campaigns')
+    accounts = [cell.value for cell in ws['A'] if cell.value is not None]
+    a = generate_macro('last_month', accounts, 'last_month')
+    b = generate_macro('campaigns', accounts, 'campaigns')
+    return a, b
