@@ -54,6 +54,7 @@ class Commands:
         # updates calendar range
         self.update = create_xpath_click_command("//*[text()='Aktualizuj']")
 
+
         # reports downloading commands
         self.select_offers_view = create_xpath_click_command(
             '//*[@id="layoutBody"]/div/div/div[4]/div[1]/div/div[3]/button')
@@ -144,7 +145,12 @@ class Commands:
 
 
 def generate_json_script(mode: str, accounts_list: list, dump: bool = False):
-    commands_array = []
+    commands_array = [{
+        "Command": "store",
+        "Target": "90",
+        "Value": "!TIMEOUT_WAIT",
+        "Description": ""
+    }, ]
 
     for account in accounts_list:
         commands = Commands(account)
@@ -155,7 +161,6 @@ def generate_json_script(mode: str, accounts_list: list, dump: bool = False):
             json.dump(commands_array, f, ensure_ascii=False)
     else:
         return commands_array
-
 
 
 def generate_macro(mode: str, accounts_list: list, name: str):
