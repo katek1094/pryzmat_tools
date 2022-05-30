@@ -6,13 +6,17 @@ from django.core.files.storage import FileSystemStorage
 from openpyxl import load_workbook
 
 
-def create_command(command: str, target: str, value: str = "", description: str = "") -> dict:
-    return {
+def create_command(command: str, target: str = None, value: str = "", targets=None, description: str = "") -> dict:
+    d = {
         "Command": command,
-        "Target": target,
         "Value": value,
         "Description": description
     }
+    if target:
+        d['Target'] = target
+    if targets:
+        d['Targets'] = targets
+    return d
 
 
 def create_click_command(*args) -> dict:
@@ -35,6 +39,9 @@ class Commands:
 
     def __init__(self, account: str):
         self.account = account
+
+        self.timeout_wait = create_command('store', '90', '!TIMEOUT_WAIT')
+
         self.open_agency_panel = create_command('selectWindow', 'tab=open',
                                                 'https://ads.allegro.pl/panel/agency/clients')
         self.open_clients_list = create_click_command('linkText=Przełącz na klienta')
@@ -53,6 +60,22 @@ class Commands:
         self.select_current_billing_month = create_xpath_click_command("//*[text()='Bieżący okres rozliczeniowy']")
         # updates calendar range
         self.update = create_xpath_click_command("//*[text()='Aktualizuj']")
+
+        self.select_cost = create_command('select',
+                                          "xpath=//*[@id=\"layoutBody\"]/div/div/div[3]/div/div/div/div/div/div/div[2]/select",
+                                          'label=Koszt', [
+                                              "xpath=//*[@id=\"layoutBody\"]/div/div/div[3]/div/div/div/div/div/div/div[2]/select",
+                                              "xpath=//select",
+                                              "css=#layoutBody > div > div > div:nth-child(3) > div > div > div > div._1kh9d > div.wrapper__eagO14H._1i06w._xbsje > div:nth-child(1) > div:nth-child(2) > select"
+                                          ])
+
+        self.select_return = create_command('select',
+                                            "xpath=//*[@id=\"layoutBody\"]/div/div/div[3]/div/div/div/div/div/div/div[4]/select",
+                                            'label=Zwrot z inwestycji', [
+                                                "xpath=//*[@id=\"layoutBody\"]/div/div/div[3]/div/div/div/div/div/div/div[4]/select",
+                                                "xpath=//div[4]/select",
+                                                "css=#layoutBody > div > div > div:nth-child(3) > div > div > div > div._1kh9d > div.wrapper__eagO14H._1i06w._xbsje > div:nth-child(1) > div:nth-child(4) > select"
+                                            ])
 
         # reports downloading commands
         self.select_offers_view = create_xpath_click_command(
@@ -75,6 +98,8 @@ class Commands:
     def last_week_commands(self):
         commands = self.campaign_commands + [
             self.open_stats,
+            self.select_cost,
+            self.select_return,
             self.open_calendar,
             self.select_last_week,
             self.update,
@@ -88,9 +113,12 @@ class Commands:
     def last_month_commands(self):
         commands = self.campaign_commands + [
             self.open_stats,
+            self.select_cost,
+            self.select_return,
             self.open_calendar,
             self.select_last_month,
             self.update,
+
         ]
 
         # if self.account.is_graphic:
@@ -144,7 +172,12 @@ class Commands:
 
 
 def generate_json_script(mode: str, accounts_list: list, dump: bool = False):
-    commands_array = []
+    commands_array = [{
+        "Command": "store",
+        "Target": "90",
+        "Value": "!TIMEOUT_WAIT",
+        "Description": ""
+    }, ]
 
     for account in accounts_list:
         commands = Commands(account)
@@ -155,7 +188,6 @@ def generate_json_script(mode: str, accounts_list: list, dump: bool = False):
             json.dump(commands_array, f, ensure_ascii=False)
     else:
         return commands_array
-
 
 
 def generate_macro(mode: str, accounts_list: list, name: str):
